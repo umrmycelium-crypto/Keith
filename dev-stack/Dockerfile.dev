@@ -1,0 +1,9 @@
+FROM python:3.12-slim
+WORKDIR /app
+RUN apt-get update && apt-get install -y build-essential curl
+COPY . .
+RUN pip install --no-cache-dir flask requests python-dotenv uvicorn fastapi websockets pydantic pydantic-core starlette prometheus-client
+RUN mkdir -p state mycelium/logs mycelium/memory
+EXPOSE 8000 8082 7001
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 CMD curl -f http://localhost:8000/status || exit 1
+CMD python -m uvicorn mycelium-hub.daemon.server:app --host 0.0.0.0 --port 8000
