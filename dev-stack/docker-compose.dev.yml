@@ -27,7 +27,7 @@ services:
     ports:
       - '11435:11434'
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:11434/']
+      test: ['CMD', 'python3', '-c', "import urllib.request; urllib.request.urlopen('http://localhost:11434/')"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -48,7 +48,7 @@ services:
     networks:
       - mycelium-hub-dev
     healthcheck:
-      test: ['CMD', 'wget', '-q', '-O', '/dev/null', 'http://localhost/']
+      test: ['CMD', 'wget', '-q', '--spider', 'http://127.0.0.1/healthz']
       interval: 30s
       timeout: 10s
       retries: 3
